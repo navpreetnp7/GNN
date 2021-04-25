@@ -12,7 +12,7 @@ tf.disable_eager_execution()
 import numpy as np
 
 from optimizer import Optimizer
-from input_data import load_data
+from input_data import load_data,toy_data
 from model import GCNModel
 from preprocessing import preprocess_graph, construct_feed_dict
 
@@ -32,7 +32,8 @@ dim = 2
 FLAGS.hidden2 = 2*dim
 
 # Load data
-adj = load_data()
+#adj = load_data()
+adj = toy_data()
 
 print(adj)
 
@@ -81,7 +82,7 @@ for epoch in range(FLAGS.epochs):
     feed_dict.update({placeholders['dropout']: FLAGS.dropout})
 
     outs = sess.run([opt.opt_op, opt.cost], feed_dict=feed_dict)
-    #preds = sess.run(model.reconstructions, feed_dict=feed_dict)
+    preds = sess.run(model.reconstructions, feed_dict=feed_dict)
     # Compute average loss
     avg_cost = outs[1]
 
@@ -91,4 +92,30 @@ for epoch in range(FLAGS.epochs):
 embed = sess.run(model.embeddings, feed_dict=feed_dict)
 print("Optimization Finished!")
 embedx,embedy = np.split(embed, 2, axis=1)
-print(embedx,embedy)
+preds = preds.reshape(5,5)
+
+
+preds = preds.reshape(5,5).tolist()
+pred = []
+for y in range(5) :
+    pred.append([])
+    for x in range(5):
+        pred[y].append(round(preds[y][x], 3))
+
+pred = np.array(pred).reshape(5,5)
+rowsum = np.array(adj.sum(1))
+degree_mat_inv_sqrt = np.diag(np.power(rowsum, 0.5).flatten())
+pred_unnormalized = pred.dot(degree_mat_inv_sqrt).transpose().dot(degree_mat_inv_sqrt)
+
+print("Original Adjacency\n")
+print(adj)
+print("\n Unnormalized reconstructed Adjaceny matrix after training\n")
+print(pred_unnormalized)
+print("\n Normalized Adjaceny using degree inverse square root\n")
+print(adj_norm)
+print("\n Normalized Reconstructed Adjaceny matrix after training (rounded to 3 decimal points)\n")
+print(np.array(pred))
+print("\nX Embedding\n")
+print(embedx)
+print("\nY Embedding\n")
+print(embedy)

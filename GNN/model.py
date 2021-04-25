@@ -67,5 +67,5 @@ class GCNModel(Model):
                                            logging=self.logging)(self.hidden1)
 
         self.reconstructions = InnerProduct(input_dim=FLAGS.hidden2,
-                                      act=lambda x:x,
+                                      act=tf.nn.relu,
                                       logging=self.logging)(self.embeddings)

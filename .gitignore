@@ -101,3 +101,4 @@ gcn/data/Taxi2017_daily_net.pkl
 gcn/data/totalTaxiNet_partition.mat
 GNN/data/Taxi2017_daily_net.pkl
 GNN/data/TaxiNet2017_3h_.mat
+GNN/reprTaxi2.py
