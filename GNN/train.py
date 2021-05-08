@@ -63,7 +63,7 @@ print(norm)
 
 # Optimizer
 
-opt = Optimizer(preds=model.reconstructions,labels=tf.reshape(placeholders['adj_norm'], [-1]),norm=norm)
+opt = Optimizer(preds=model.reconstructions,labels=tf.reshape(placeholders['adj_orig'], [-1]),norm=norm)
 
 
 vars = tf.trainable_variables()
