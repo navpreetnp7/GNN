@@ -63,7 +63,7 @@ print(norm)
 
 # Optimizer
 
-opt = Optimizer(preds=model.reconstructions,labels=tf.reshape(placeholders['adj_orig'], [-1]),norm=norm)
+opt = Optimizer(preds=model.reconstructions,labels=tf.reshape(placeholders['adj_norm'], [-1]),norm=norm)
 
 
 vars = tf.trainable_variables()
@@ -101,21 +101,13 @@ for y in range(5) :
     pred.append([])
     for x in range(5):
         pred[y].append(round(preds[y][x], 3))
-
-pred = np.array(pred).reshape(5,5)
-rowsum = np.array(adj.sum(1))
-degree_mat_inv_sqrt = np.diag(np.power(rowsum, 0.5).flatten())
-pred_unnormalized = pred.dot(degree_mat_inv_sqrt).transpose().dot(degree_mat_inv_sqrt)
-
-print("Original Adjacency\n")
 print(adj)
-print("\n Unnormalized reconstructed Adjaceny matrix after training\n")
-print(pred_unnormalized)
-print("\n Normalized Adjaceny using degree inverse square root\n")
+print("")
 print(adj_norm)
-print("\n Normalized Reconstructed Adjaceny matrix after training (rounded to 3 decimal points)\n")
+print("")
 print(np.array(pred))
-print("\nX Embedding\n")
+print("")
 print(embedx)
-print("\nY Embedding\n")
+print("")
 print(embedy)
+print("")
